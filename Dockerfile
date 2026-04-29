@@ -1,14 +1,14 @@
-# 构建阶段
-FROM node:20-alpine AS builder
+# 构建阶段 - 前端
+FROM node:20-alpine AS frontend-builder
 
-WORKDIR /app
+WORKDIR /app/frontend
 
 # 先复制依赖文件
-COPY package.json ./
+COPY frontend/package.json ./
 RUN npm install
 
 # 复制源代码并构建
-COPY . .
+COPY frontend/ ./
 RUN npm run build
 
 # 生产阶段
@@ -24,7 +24,7 @@ RUN cd backend && npm install --production
 COPY backend/src ./backend/src
 
 # 复制前端构建产物
-COPY --from=builder /app/dist ./frontend/dist
+COPY --from=frontend-builder /app/frontend/dist ./frontend/dist
 
 # 创建数据目录
 RUN mkdir -p /app/data
