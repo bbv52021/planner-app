@@ -24,11 +24,43 @@
 
 ## 🚀 快速开始
 
-### 方式一：Docker部署（推荐，适合群晖NAS）
+### 方式一：直接拉取镜像部署（最简单，推荐）
 
-1. **下载项目**
+无需克隆代码，直接拉取预构建的 Docker 镜像：
+
+1. **创建 docker-compose.yml**
+   ```yaml
+   version: '3.8'
+   services:
+     planner:
+       image: ghcr.io/bbv52021/planner-app:latest
+       container_name: planner-app
+       restart: unless-stopped
+       ports:
+         - "3080:3000"
+       volumes:
+         - ./data:/app/data
+       environment:
+         - NODE_ENV=production
+         - JWT_SECRET=your-secret-key-please-change-this
+   ```
+
+2. **启动服务**
    ```bash
-   git clone https://github.com/your-username/planner-app.git
+   docker-compose up -d
+   ```
+
+3. **访问应用**
+   - PC端：浏览器打开 `http://你的服务器IP:3080`
+   - 手机端：手机浏览器打开相同地址，可添加到主屏幕
+
+> 💡 镜像支持 `linux/amd64` 和 `linux/arm64` 架构，群晖NAS可直接使用。
+
+### 方式二：从源码构建部署
+
+1. **克隆项目**
+   ```bash
+   git clone https://github.com/bbv52021/planner-app.git
    cd planner-app
    ```
 
@@ -39,16 +71,12 @@
      - JWT_SECRET=your-own-secret-key-here
    ```
 
-3. **启动服务**
+3. **构建并启动**
    ```bash
    docker-compose up -d --build
    ```
 
-4. **访问应用**
-   - PC端：浏览器打开 `http://你的服务器IP:3080`
-   - 手机端：手机浏览器打开相同地址，可添加到主屏幕
-
-### 方式二：本地开发
+### 方式三：本地开发
 
 1. **安装依赖**
    ```bash
@@ -79,12 +107,12 @@
 
 1. 打开群晖 **Container Manager (Docker)**
 2. 进入 **项目** → **创建**
-3. 选择项目文件夹，上传 `docker-compose.yml`
+3. 选择项目文件夹，创建 `docker-compose.yml`（内容见方式一）
 4. 或者通过 **SSH** 登录群晖：
    ```bash
    cd /volume1/docker/planner
-   # 上传项目文件到此目录
-   docker-compose up -d --build
+   # 创建 docker-compose.yml 文件
+   docker-compose up -d
    ```
 5. 在群晖防火墙中放行 3080 端口
 6. 浏览器访问 `http://群晖IP:3080`
@@ -105,6 +133,15 @@
 ## 📂 数据备份
 
 数据存储在 `./data/planner.db` 文件中，备份只需复制此文件即可。
+
+## 🐳 Docker 镜像
+
+镜像自动构建并发布到 GitHub Container Registry：
+
+```bash
+# 拉取最新镜像
+docker pull ghcr.io/bbv52021/planner-app:latest
+```
 
 ## 📄 License
 
