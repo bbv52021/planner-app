@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  planner:
+    image: planner-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: planner-app
+    restart: unless-stopped
+    ports:
+      - "3080:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_PATH=/app/data/planner.db
+      - JWT_SECRET=your-secret-key-please-change-this
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s

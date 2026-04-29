@@ -1,0 +1,16 @@
+{
+  "name": "工作生活备忘录",
+  "short_name": "备忘录",
+  "description": "工作生活备忘录 - 项目管理与进度跟踪",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0066CC",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
